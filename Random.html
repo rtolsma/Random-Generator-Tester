@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>How Random Are Random Generators?</title>
+</head>
+<body>
+
+<h1>Random Number Tester</h1>
+<p><b>If the Random Generators were perfectly random, then all of the proportions should be exactly equal, the difference\n
+between these values shows the error in the generators</b></p>
+<h2 id="samples"></h2>
+<h2 id="largest"></h2>
+
+<table id="data">
+
+</table>
+
+</body>
+
+<script type="text/javascript">
+
+    var animate =
+            window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            function(callback) {
+                return setTimeout(callback, 1);
+            };
+
+
+
+
+
+  //  var intervals=document.getElementsByName("intervals").value;
+    var intervals=window.prompt("Enter a number between 2-100");
+    var precision=999;
+    var table=document.getElementById("data");
+    var counter=1;
+    var proportion=[intervals];
+    var row=[];
+    var cells=[];
+    console.log(intervals);
+
+  function init() {
+      for(var i=0; i<intervals; i++) {
+        row[i]=table.insertRow(i);
+        cells[i]=row[i].insertCell(0);
+          proportion[i]=0;
+      }
+        for(var i=0; i< cells.length; i++) {
+            cells[i].innerHTML="<h3><b>Proportion of Values between "+ (i*100/intervals).toFixed(3)+"-"+( (i*100/intervals)+100/intervals).toFixed(3)+":<b></h3>";
+        }
+
+
+            function run() {
+                animate(run);
+                for(var i=0; i< precision; i++) {
+                    var random=Math.random();
+                  //which range it was in
+                    for(var j=0; j<intervals; j++) {
+
+
+                        if(!(random >((j+1)/intervals))) {
+                            proportion[j]++;
+                            break;
+                        }
+                    }
+
+
+                }
+                for(var i=0; i<intervals; i++) {
+                    cells[i].innerHTML="<h3><b>Proportion of Values between "+ (i*100/intervals).toFixed(3)
+                    +"-"+( (i*100/intervals)+100/intervals).toFixed(3)+":<b></h3>"
+                    +"<h3><b>"+proportion[i]/(precision*counter)+"</b></h3>";
+                    console.log("Proportion between "+(i*100/intervals).toFixed(2)+"-"+(i*100/intervals+100/intervals)+":"+proportion[i]/(precision*counter));
+                }
+            var samples=document.getElementById("samples");
+                samples.innerHTML="Samples: "+counter+" Trials: "+(precision*counter);
+                var largest=document.getElementById("largest");
+                var max= 0, index;
+                for(var i=0; i<intervals; i++) {
+                if(max<proportion[i]) {
+                    max=proportion[i];
+                    index=i;
+                }
+            }
+            largest.innerHTML="Largest proportion is between "+((index)/intervals)+"-"+((index+1)/intervals)+" at "+ proportion[index]/(precision*counter)+"%";
+                counter++;
+
+            }
+
+
+      run()
+
+
+  }
+
+init();
+
+
+</script>
+
+
+</html>
